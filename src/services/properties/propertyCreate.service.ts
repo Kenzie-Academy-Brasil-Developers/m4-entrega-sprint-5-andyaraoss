@@ -25,22 +25,20 @@ const propertyCreateService = async ({
     throw new AppError("The zipCode must have only 8 numbers");
   }
 
-  const findCategoryId = (await categoryRepository.find()).find((category) => {
-    return category.id === categoryId;
+  const findCategoryId = await categoryRepository.findOneBy({
+    id: categoryId,
   });
 
   if (!findCategoryId) {
     throw new AppError("Invalid category", 404);
   }
 
-  const findAddress = await addressesRepository.findOne({
-    where: {
-      district: district,
-      zipCode: zipCode,
-      number: number,
-      city: city,
-      state: state,
-    },
+  const findAddress = await addressesRepository.findOneBy({
+    district: district,
+    zipCode: zipCode,
+    number: number,
+    city: city,
+    state: state,
   });
 
   if (findAddress) {
